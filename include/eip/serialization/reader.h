@@ -14,6 +14,7 @@ express permission of Clearpath Robotics.
 
 #include <stdexcept>
 #include <boost/asio.hpp>
+#include <boost/endian/conversion.hpp>
 
 #include "eip/eip_types.h"
 
@@ -38,6 +39,7 @@ public:
   {
     readBytes(&v, sizeof(v));
   }
+
 
   /**
    * Read a set of bytes from the input into the given buffer
@@ -67,6 +69,17 @@ public:
    */
   virtual void skip(size_t n) = 0;
 };
+
+/**
+ * Specialized template to handle big endian fields in the socket address.
+ */
+template <> inline void Reader::read(struct sockaddr_in& v)
+{
+  readBytes(&v, sizeof(v));
+  boost::endian::big_to_native_inplace(v.sin_family);
+  //boost::endian::big_to_native_inplace(v.sin_port);
+  //boost::endian::big_to_native_inplace(v.sin_addr.s_addr);
+}
 
 } // namespace serialization
 } // namespace eip
