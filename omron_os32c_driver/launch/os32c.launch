@@ -4,7 +4,7 @@
   <node pkg="os32c" type="os32c" name="os32c">
     <param name="host" value="$(arg host)" />
     <param name="frame_id" value="laser" />
-    <param name="start_angle" value="2.3596851486963333" />
-    <param name="end_angle" value="-2.3596851486963333" />
+    <param name="start_angle" value="-2.2899" />
+    <param name="end_angle" value="2.2899" />
   </node>
 </launch>

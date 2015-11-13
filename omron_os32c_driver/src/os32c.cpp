@@ -137,8 +137,8 @@ RangeAndReflectanceMeasurement OS32C::getSingleRRScan()
 
 void OS32C::fillLaserScanStaticConfig(sensor_msgs::LaserScan* ls)
 {
-  ls->angle_min = start_angle_;
-  ls->angle_max = end_angle_;
+  ls->angle_max = start_angle_;
+  ls->angle_min = end_angle_;
   ls->angle_increment = ANGLE_INC;
   ls->range_min = DISTANCE_MIN;
   ls->range_max = DISTANCE_MAX;
