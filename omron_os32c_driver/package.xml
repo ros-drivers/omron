@@ -16,4 +16,5 @@
   <depend>sensor_msgs</depend>
 
   <test_depend>gtest</test_depend>
+  <test_depend>roslaunch</test_depend>
 </package>

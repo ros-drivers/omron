@@ -1,7 +1,7 @@
 <launch>
   <arg name="host" default="192.168.1.1" />
 
-  <node pkg="os32c" type="os32c" name="os32c">
+  <node pkg="omron_os32c_driver" type="omron_os32c_node" name="omron_os32c_node">
     <param name="host" value="$(arg host)" />
     <param name="frame_id" value="laser" />
     <param name="start_angle" value="-2.2899" />

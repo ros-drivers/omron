@@ -51,6 +51,9 @@ install(DIRECTORY launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 if (CATKIN_ENABLE_TESTING)
+  find_package(roslaunch REQUIRED)
+  roslaunch_add_file_check(launch/os32c.launch)
+
   catkin_add_gtest(${PROJECT_NAME}-test
     test/measurement_report_config_test.cpp
     test/measurement_report_header_test.cpp
