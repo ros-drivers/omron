@@ -44,7 +44,7 @@ install(TARGETS scanner_node omron_os32c omron_os32c_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install(DIRECTORY include/${PROJECT_NAME}
+install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
 install(DIRECTORY launch
