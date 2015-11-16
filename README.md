@@ -1,7 +1,7 @@
-OS32C [![Build Status](https://travis-ci.org/mikepurvis/os32c.svg?branch=indigo-devel)](https://travis-ci.org/mikepurvis/os32c)
-=====
+OMRON OS32C [![Build Status](https://travis-ci.org/mikepurvis/os32c.svg?branch=indigo-devel)](https://travis-ci.org/mikepurvis/os32c)
+===========
 
-This package contains a ROS device driver for the OMRON OS32C, an EtherNet/IP-based
+This repo contains a ROS device driver for the OMRON OS32C, an EtherNet/IP-based
 safety-rated laser scanner (LIDAR). You can find more information on this product
 here:
 
