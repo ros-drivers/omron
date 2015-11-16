@@ -7,7 +7,6 @@ Software License Agreement (BSD)
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that
 the following conditions are met:
-
  * Redistributions of source code must retain the above copyright notice, this list of conditions and the
    following disclaimer.
  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
@@ -24,8 +23,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCL
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef OS32C_MEASUREMENT_REPORT_H
-#define OS32C_MEASUREMENT_REPORT_H
+#ifndef OMRON_OS32C_DRIVER_MEASUREMENT_REPORT_H
+#define OMRON_OS32C_DRIVER_MEASUREMENT_REPORT_H
 
 #include <string>
 #include <vector>
@@ -101,4 +100,4 @@ public:
 
 } // namespace omron_os32c_driver
 
-#endif  // OS32C_MEASUREMENT_REPORT_H
+#endif  // OMRON_OS32C_DRIVER_MEASUREMENT_REPORT_H
