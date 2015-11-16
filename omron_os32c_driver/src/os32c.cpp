@@ -14,12 +14,12 @@ express permission of Clearpath Robotics.
 #include <boost/make_shared.hpp>
 #include <boost/asio.hpp>
 
-#include "os32c/os32c.h"
-#include "eip/serialization/serializable_buffer.h"
-#include "eip/cpf_packet.h"
-#include "eip/cpf_item.h"
-#include "eip/sequenced_address_item.h"
-#include "eip/sequenced_data_item.h"
+#include "omron_os32c_driver/os32c.h"
+#include "ovda_ethernetip/serialization/serializable_buffer.h"
+#include "ovda_ethernetip/cpf_packet.h"
+#include "ovda_ethernetip/cpf_item.h"
+#include "ovda_ethernetip/sequenced_address_item.h"
+#include "ovda_ethernetip/sequenced_data_item.h"
 
 using std::cout;
 using std::endl;
@@ -33,9 +33,9 @@ using eip::CPFItem;
 using eip::CPFPacket;
 using eip::SequencedAddressItem;
 using eip::SequencedDataItem;
-using os32c::RangeAndReflectanceMeasurement;
+using omron_os32c_driver::RangeAndReflectanceMeasurement;
 
-namespace os32c {
+namespace omron_os32c_driver {
 
 const double OS32C::ANGLE_MIN = DEG2RAD(-135.2);
 const double OS32C::ANGLE_MAX = DEG2RAD( 135.2);

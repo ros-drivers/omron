@@ -1,7 +1,7 @@
 /**
 Software License Agreement (proprietary)
 
-\file      measurement_report.h
+\file      range_and_reflectance_measurement.h
 \authors   Kareem Shehata <kshehata@clearpathrobotics.com>
 \copyright Copyright (c) 2015, Clearpath Robotics, Inc., All rights reserved.
 
@@ -9,42 +9,44 @@ Redistribution and use in source and binary forms, with or without modification,
 express permission of Clearpath Robotics.
 */
 
-#ifndef OS32C_MEASUREMENT_REPORT_H
-#define OS32C_MEASUREMENT_REPORT_H
+#ifndef OS32C_RANGE_AND_REFLECTANCE_MEASUREMENT_H
+#define OS32C_RANGE_AND_REFLECTANCE_MEASUREMENT_H
 
 #include <string>
 #include <vector>
 
-#include "eip/eip_types.h"
-#include "eip/serialization/reader.h"
-#include "eip/serialization/writer.h"
-#include "eip/serialization/serializable.h"
-#include "os32c/measurement_report_header.h"
+#include "ovda_ethernetip/eip_types.h"
+#include "ovda_ethernetip/serialization/reader.h"
+#include "ovda_ethernetip/serialization/writer.h"
+#include "ovda_ethernetip/serialization/serializable.h"
+#include "omron_os32c_driver/measurement_report_header.h"
 
 using std::vector;
 using eip::serialization::Serializable;
 using eip::serialization::Reader;
 using eip::serialization::Writer;
 
-namespace os32c {
+namespace omron_os32c_driver {
 
 /**
  * Data structure and operators for OS32C specific Measurement Report data
- * as defined in the OS32C-DM Ethernet/IP Addendum. Used for both range and
- * reflectance data.
+ * as defined in the OS32C-DM Ethernet/IP Addendum that includes both
+ * range and reflectance data in the same message.
  */
-class MeasurementReport : public Serializable
+class RangeAndReflectanceMeasurement : public Serializable
 {
 public:
   MeasurementReportHeader header;
-  vector<EIP_UINT> measurement_data;
+  vector<EIP_UINT> range_data;
+  vector<EIP_UINT> reflectance_data;
 
   /**
-   * Size of this message including all measurement data
+   * Size of this message including all measurement data.
    */
   virtual size_t getLength() const
   {
-    return header.getLength() + measurement_data.size() * sizeof(EIP_UINT);
+    return header.getLength() + range_data.size() * sizeof(EIP_UINT)
+      + reflectance_data.size() * sizeof(EIP_UINT);
   }
 
   /**
@@ -56,7 +58,8 @@ public:
   virtual Writer& serialize(Writer& writer) const
   {
     header.serialize(writer);
-    writer.writeBytes(&measurement_data[0], measurement_data.size() * sizeof(EIP_UINT));
+    writer.writeBytes(&range_data[0], range_data.size() * sizeof(EIP_UINT));
+    writer.writeBytes(&reflectance_data[0], reflectance_data.size() * sizeof(EIP_UINT));
     return writer;
   }
 
@@ -78,12 +81,14 @@ public:
   virtual Reader& deserialize(Reader& reader)
   {
     header.deserialize(reader);
-    measurement_data.resize(header.num_beams);
-    reader.readBytes(&measurement_data[0], measurement_data.size() * sizeof(EIP_UINT));
+    range_data.resize(header.num_beams);
+    reflectance_data.resize(header.num_beams);
+    reader.readBytes(&range_data[0], range_data.size() * sizeof(EIP_UINT));
+    reader.readBytes(&reflectance_data[0], reflectance_data.size() * sizeof(EIP_UINT));
     return reader;
   }
 };
 
-} // namespace os32c
+} // namespace omron_os32c_driver
 
-#endif  // OS32C_MEASUREMENT_REPORT_H
+#endif  // OS32C_RANGE_AND_REFLECTANCE_MEASUREMENT_H

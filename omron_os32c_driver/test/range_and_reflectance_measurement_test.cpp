@@ -12,13 +12,13 @@ express permission of Clearpath Robotics.
 #include <gtest/gtest.h>
 #include <boost/asio.hpp>
 
-#include "os32c/range_and_reflectance_measurement.h"
-#include "eip/serialization/serializable_buffer.h"
-#include "eip/serialization/buffer_writer.h"
-#include "eip/serialization/buffer_reader.h"
+#include "omron_os32c_driver/range_and_reflectance_measurement.h"
+#include "ovda_ethernetip/serialization/serializable_buffer.h"
+#include "ovda_ethernetip/serialization/buffer_writer.h"
+#include "ovda_ethernetip/serialization/buffer_reader.h"
 
 using namespace boost::asio;
-using namespace os32c;
+using namespace omron_os32c_driver;
 using namespace eip;
 using namespace eip::serialization;
 using namespace boost::asio;

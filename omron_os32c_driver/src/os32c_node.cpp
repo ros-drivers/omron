@@ -13,10 +13,10 @@ express permission of Clearpath Robotics.
 #include <boost/shared_ptr.hpp>
 #include <sensor_msgs/LaserScan.h>
 
-#include "eip/socket/tcp_socket.h"
-#include "eip/socket/udp_socket.h"
-#include "os32c/os32c.h"
-#include "os32c/range_and_reflectance_measurement.h"
+#include "ovda_ethernetip/socket/tcp_socket.h"
+#include "ovda_ethernetip/socket/udp_socket.h"
+#include "omron_os32c_driver/os32c.h"
+#include "omron_os32c_driver/range_and_reflectance_measurement.h"
 
 using std::cout;
 using std::endl;
@@ -24,7 +24,7 @@ using boost::shared_ptr;
 using sensor_msgs::LaserScan;
 using eip::socket::TCPSocket;
 using eip::socket::UDPSocket;
-using namespace os32c;
+using namespace omron_os32c_driver;
 
 int main(int argc, char *argv[])
 {

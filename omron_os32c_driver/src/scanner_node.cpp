@@ -11,8 +11,7 @@ express permission of Clearpath Robotics.
 
 #include <ros/ros.h>
 
-#include "eip/io_scanner.h"
-#include "eip/io_scanner.h"
+#include "ovda_ethernetip/io_scanner.h"
 
 using std::cout;
 using std::endl;

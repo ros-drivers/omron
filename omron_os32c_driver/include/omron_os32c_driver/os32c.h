@@ -9,8 +9,8 @@ Redistribution and use in source and binary forms, with or without modification,
 express permission of Clearpath Robotics.
 */
 
-#ifndef OS32C_OS32C_H
-#define OS32C_OS32C_H
+#ifndef OMRON_OS32C_DRIVER_OS32C_H
+#define OMRON_OS32C_DRIVER_OS32C_H
 
 #include <gtest/gtest_prod.h>
 #include <string>
@@ -18,11 +18,11 @@ express permission of Clearpath Robotics.
 #include <boost/shared_ptr.hpp>
 #include <sensor_msgs/LaserScan.h>
 
-#include "eip/session.h"
-#include "eip/socket/socket.h"
-#include "os32c/measurement_report.h"
-#include "os32c/measurement_report_config.h"
-#include "os32c/range_and_reflectance_measurement.h"
+#include "ovda_ethernetip/session.h"
+#include "ovda_ethernetip/socket/socket.h"
+#include "omron_os32c_driver/measurement_report.h"
+#include "omron_os32c_driver/measurement_report_config.h"
+#include "omron_os32c_driver/range_and_reflectance_measurement.h"
 
 using std::vector;
 using boost::shared_ptr;
@@ -33,7 +33,7 @@ using eip::socket::Socket;
 #define DEG2RAD(a) (a * M_PI / 180)
 #define RAD2DEG(a) (a * 180 / M_PI)
 
-namespace os32c {
+namespace omron_os32c_driver {
 
 
 typedef enum
@@ -65,7 +65,7 @@ public:
    * Construct a new OS32C instance.
    * @param socket Socket instance to use for communication with the lidar
    */
-  OS32C(shared_ptr<Socket> socket, shared_ptr<Socket> io_socket) 
+  OS32C(shared_ptr<Socket> socket, shared_ptr<Socket> io_socket)
     : Session(socket, io_socket), start_angle_(ANGLE_MAX), end_angle_(ANGLE_MIN),
       connection_num_(-1), mrc_sequence_num_(1)
   {
@@ -207,6 +207,6 @@ private:
   void calcBeamMask(double start_angle, double end_angle, EIP_BYTE mask[]);
 };
 
-} // namespace os32c
+} // namespace omron_os32c_driver
 
-#endif  // OS32C_OS32C_H
+#endif  // OMRON_OS32C_DRIVER_OS32C_H

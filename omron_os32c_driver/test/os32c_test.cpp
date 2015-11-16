@@ -12,11 +12,11 @@ express permission of Clearpath Robotics.
 #include <gtest/gtest.h>
 #include <boost/make_shared.hpp>
 
-#include "os32c/os32c.h"
-#include "eip/socket/test_socket.h"
-#include "eip/rr_data_response.h"
-#include "eip/serialization/serializable_buffer.h"
-#include "eip/serialization/serializable_primitive.h"
+#include "omron_os32c_driver/os32c.h"
+#include "ovda_ethernetip/socket/test_socket.h"
+#include "ovda_ethernetip/rr_data_response.h"
+#include "ovda_ethernetip/serialization/serializable_buffer.h"
+#include "ovda_ethernetip/serialization/serializable_primitive.h"
 
 using boost::make_shared;
 using namespace boost::asio;
@@ -25,7 +25,7 @@ using namespace eip;
 using namespace eip::socket;
 using namespace eip::serialization;
 
-namespace os32c {
+namespace omron_os32c_driver {
 
 class OS32CTest : public :: testing :: Test
 {
@@ -166,13 +166,13 @@ TEST_F(OS32CTest, test_calc_beam_invalid_args)
   EIP_BYTE buffer[96]; // plus 32 bits on each end as guards
   memset(buffer, 0xAA, sizeof(buffer));
   EIP_BYTE* mask = buffer + 4;
-  EXPECT_THROW(os32c.calcBeamMask(2.3631758089456514, -0.7051130178057091, mask), 
+  EXPECT_THROW(os32c.calcBeamMask(2.3631758089456514, -0.7051130178057091, mask),
     std::invalid_argument);
-  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, -2.3631758089456514, mask), 
+  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, -2.3631758089456514, mask),
     std::invalid_argument);
-  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, 0.6911503837897546, mask), 
+  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, 0.6911503837897546, mask),
     std::invalid_argument);
-  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, 0.6841690685271065, mask), 
+  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, 0.6841690685271065, mask),
     std::invalid_argument);
 }
 
