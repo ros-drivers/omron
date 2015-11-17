@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(omron_os32c_driver)
 
-find_package(catkin REQUIRED COMPONENTS roscpp ovda_ethernetip)
+find_package(catkin REQUIRED COMPONENTS roscpp odva_ethernetip)
 
 find_package(Boost 1.47 REQUIRED COMPONENTS system)
 

@@ -32,8 +32,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 #include <boost/shared_ptr.hpp>
 #include <sensor_msgs/LaserScan.h>
 
-#include "ovda_ethernetip/session.h"
-#include "ovda_ethernetip/socket/socket.h"
+#include "odva_ethernetip/session.h"
+#include "odva_ethernetip/socket/socket.h"
 #include "omron_os32c_driver/measurement_report.h"
 #include "omron_os32c_driver/measurement_report_config.h"
 #include "omron_os32c_driver/range_and_reflectance_measurement.h"
