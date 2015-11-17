@@ -28,10 +28,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 #include <boost/make_shared.hpp>
 
 #include "omron_os32c_driver/os32c.h"
-#include "ovda_ethernetip/socket/test_socket.h"
-#include "ovda_ethernetip/rr_data_response.h"
-#include "ovda_ethernetip/serialization/serializable_buffer.h"
-#include "ovda_ethernetip/serialization/serializable_primitive.h"
+#include "odva_ethernetip/socket/test_socket.h"
+#include "odva_ethernetip/rr_data_response.h"
+#include "odva_ethernetip/serialization/serializable_buffer.h"
+#include "odva_ethernetip/serialization/serializable_primitive.h"
 
 using boost::make_shared;
 using namespace boost::asio;

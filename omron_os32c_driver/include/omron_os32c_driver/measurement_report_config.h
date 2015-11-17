@@ -28,10 +28,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
 #include <string>
 
-#include "ovda_ethernetip/eip_types.h"
-#include "ovda_ethernetip/serialization/reader.h"
-#include "ovda_ethernetip/serialization/writer.h"
-#include "ovda_ethernetip/serialization/serializable.h"
+#include "odva_ethernetip/eip_types.h"
+#include "odva_ethernetip/serialization/reader.h"
+#include "odva_ethernetip/serialization/writer.h"
+#include "odva_ethernetip/serialization/serializable.h"
 
 using std::string;
 using eip::serialization::Serializable;

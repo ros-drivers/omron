@@ -26,7 +26,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
 #include <ros/ros.h>
 
-#include "ovda_ethernetip/io_scanner.h"
+#include "odva_ethernetip/io_scanner.h"
 
 using std::cout;
 using std::endl;

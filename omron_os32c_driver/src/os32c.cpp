@@ -30,11 +30,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 #include <boost/asio.hpp>
 
 #include "omron_os32c_driver/os32c.h"
-#include "ovda_ethernetip/serialization/serializable_buffer.h"
-#include "ovda_ethernetip/cpf_packet.h"
-#include "ovda_ethernetip/cpf_item.h"
-#include "ovda_ethernetip/sequenced_address_item.h"
-#include "ovda_ethernetip/sequenced_data_item.h"
+#include "odva_ethernetip/serialization/serializable_buffer.h"
+#include "odva_ethernetip/cpf_packet.h"
+#include "odva_ethernetip/cpf_item.h"
+#include "odva_ethernetip/sequenced_address_item.h"
+#include "odva_ethernetip/sequenced_data_item.h"
 
 using std::cout;
 using std::endl;
