@@ -1,4 +1,4 @@
-OMRON OS32C [![Build Status](https://travis-ci.org/mikepurvis/os32c.svg?branch=indigo-devel)](https://travis-ci.org/mikepurvis/os32c)
+OMRON OS32C [![Build Status](https://travis-ci.org/ros-drivers/omron.svg?branch=indigo-devel)](https://travis-ci.org/ros-drivers/omron)
 ===========
 
 This repo contains a ROS device driver for the OMRON OS32C, an EtherNet/IP-based
