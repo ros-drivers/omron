@@ -2,8 +2,8 @@
 Changelog for package omron_os32c_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.1 (2015-11-17)
+------------------
 * Fixed library name.
 * Contributors: Tony Baltovski
 
