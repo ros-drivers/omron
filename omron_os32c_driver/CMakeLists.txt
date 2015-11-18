@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(omron_os32c_driver)
 
-find_package(catkin REQUIRED COMPONENTS roscpp odva_ethernetip)
+find_package(catkin REQUIRED COMPONENTS odva_ethernetip roscpp sensor_msgs)
 
 find_package(Boost 1.47 REQUIRED COMPONENTS system)
 
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp
+  CATKIN_DEPENDS odva_ethernetip roscpp sensor_msgs
   LIBRARIES omron_os32c
-  DEPENDS boost
+  DEPENDS Boost
 )
 
 include_directories(
@@ -38,7 +38,7 @@ target_link_libraries(omron_os32c_node
 )
 
 ## Mark executables and libraries for installation
-install(TARGETS scanner_node omron_os32c omron_os32c_node
+install(TARGETS omron_os32c omron_os32c_node scanner_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
