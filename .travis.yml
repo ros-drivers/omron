@@ -17,13 +17,13 @@ install:
   - rosdep update
   - rosdep install --default-yes --from-paths ./ --rosdistro $CI_ROS_DISTRO
 script:
+  - mkdir -p ~/catkin_ws/src
+  - ln -s $TRAVIS_BUILD_DIR ~/catkin_ws/src/repo
+  - cd ~/catkin_ws
   - source /opt/ros/$CI_ROS_DISTRO/setup.bash
-  - mkdir ../build && cd ../build
-  - cmake $TRAVIS_BUILD_DIR -DCMAKE_INSTALL_PREFIX=../install
-  - make -j1
-  - make -j1 tests
-  - make -j1 run_tests
+  - catkin_make
+  - catkin_make run_tests
   - catkin_test_results .
-  - make -j1 install
+  - catkin_make install
 notifications:
   email: false
