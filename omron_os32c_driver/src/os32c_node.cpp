@@ -26,6 +26,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
 #include <ros/ros.h>
 #include <boost/shared_ptr.hpp>
+#include <diagnostic_updater/publisher.h>
 #include <sensor_msgs/LaserScan.h>
 
 #include "odva_ethernetip/socket/tcp_socket.h"
@@ -40,6 +41,8 @@ using sensor_msgs::LaserScan;
 using eip::socket::TCPSocket;
 using eip::socket::UDPSocket;
 using namespace omron_os32c_driver;
+using namespace diagnostic_updater;
+
 
 int main(int argc, char *argv[])
 {
@@ -48,14 +51,28 @@ int main(int argc, char *argv[])
 
   // get sensor config from params
   string host, frame_id;
-  double start_angle, end_angle;
+  double start_angle, end_angle, expected_frequency, frequency_tolerance, timestamp_min_acceptable,
+      timestamp_max_acceptable;
   ros::param::param<std::string>("~host", host, "192.168.1.1");
   ros::param::param<std::string>("~frame_id", frame_id, "laser");
   ros::param::param<double>("~start_angle", start_angle, OS32C::ANGLE_MAX);
   ros::param::param<double>("~end_angle", end_angle, OS32C::ANGLE_MIN);
+  ros::param::param<double>("~expected_frequency", expected_frequency, 12.856);
+  ros::param::param<double>("~frequency_tolerance", frequency_tolerance, 0.1);
+  ros::param::param<double>("~timestamp_min_acceptable", timestamp_min_acceptable, -1);
+  ros::param::param<double>("~timestamp_max_acceptable", timestamp_max_acceptable, -1);
 
   // publisher for laserscans
   ros::Publisher laserscan_pub = nh.advertise<LaserScan>("scan", 1);
+
+  // diagnostics for frequency
+  Updater updater;
+  updater.setHardwareID(host);
+  DiagnosedPublisher<LaserScan> diagnosed_publisher(laserscan_pub, updater, FrequencyStatusParam(&expected_frequency,
+                                                                                                 &expected_frequency,
+                                                                                                 frequency_tolerance),
+                                                    TimeStampStatusParam(timestamp_min_acceptable,
+                                                                         timestamp_max_acceptable));
 
   boost::asio::io_service io_service;
   shared_ptr<TCPSocket> socket = shared_ptr<TCPSocket>(new TCPSocket(io_service));
@@ -108,10 +125,13 @@ int main(int argc, char *argv[])
       MeasurementReport report = os32c.receiveMeasurementReportUDP();
       OS32C::convertToLaserScan(report, &laserscan_msg);
 
-      // Stamp and publish message.
+      // Stamp and publish message diagnosed
       laserscan_msg.header.stamp = ros::Time::now();
       laserscan_msg.header.seq++;
-      laserscan_pub.publish(laserscan_msg);
+      diagnosed_publisher.publish(laserscan_msg);
+
+      // Update diagnostics
+      updater.update();
 
       // Every tenth message received, send the keepalive message in response.
       // TODO: Make this time-based instead of message-count based.
