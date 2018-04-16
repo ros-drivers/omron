@@ -50,10 +50,11 @@ int main(int argc, char *argv[])
   ros::NodeHandle nh;
 
   // get sensor config from params
-  string host, frame_id;
+  string host, frame_id, local_ip;
   double start_angle, end_angle, expected_frequency, frequency_tolerance, timestamp_min_acceptable,
       timestamp_max_acceptable;
   ros::param::param<std::string>("~host", host, "192.168.1.1");
+  ros::param::param<std::string>("~local_ip", local_ip, "0.0.0.0");
   ros::param::param<std::string>("~frame_id", frame_id, "laser");
   ros::param::param<double>("~start_angle", start_angle, OS32C::ANGLE_MAX);
   ros::param::param<double>("~end_angle", end_angle, OS32C::ANGLE_MIN);
@@ -76,7 +77,7 @@ int main(int argc, char *argv[])
 
   boost::asio::io_service io_service;
   shared_ptr<TCPSocket> socket = shared_ptr<TCPSocket>(new TCPSocket(io_service));
-  shared_ptr<UDPSocket> io_socket = shared_ptr<UDPSocket>(new UDPSocket(io_service, 2222));
+  shared_ptr<UDPSocket> io_socket = shared_ptr<UDPSocket>(new UDPSocket(io_service, 2222, local_ip));
   OS32C os32c(socket, io_socket);
 
   try
