@@ -45,6 +45,7 @@ using eip::socket::TCPSocket;
 using eip::socket::UDPSocket;
 using namespace omron_os32c_driver;
 using namespace diagnostic_updater;
+const double EPS = 1e-3;
 
 
 int main(int argc, char *argv[])
@@ -55,19 +56,42 @@ int main(int argc, char *argv[])
   // get sensor config from params
   string host, frame_id, local_ip;
   double start_angle, end_angle, expected_frequency, frequency_tolerance, timestamp_min_acceptable,
-      timestamp_max_acceptable;
+      timestamp_max_acceptable, frequency;
+  bool publish_reflectivity;
   ros::param::param<std::string>("~host", host, "192.168.1.1");
   ros::param::param<std::string>("~local_ip", local_ip, "0.0.0.0");
   ros::param::param<std::string>("~frame_id", frame_id, "laser");
   ros::param::param<double>("~start_angle", start_angle, OS32C::ANGLE_MAX);
   ros::param::param<double>("~end_angle", end_angle, OS32C::ANGLE_MIN);
-  ros::param::param<double>("~expected_frequency", expected_frequency, 12.856);
+  ros::param::param<double>("~frequency", frequency, 12.856);
+  ros::param::param<double>("~expected_frequency", expected_frequency, frequency);
   ros::param::param<double>("~frequency_tolerance", frequency_tolerance, 0.1);
   ros::param::param<double>("~timestamp_min_acceptable", timestamp_min_acceptable, -1);
   ros::param::param<double>("~timestamp_max_acceptable", timestamp_max_acceptable, -1);
+  ros::param::param<bool>("~publish_reflectivity", publish_reflectivity, false);
 
   // publisher for laserscans
   ros::Publisher laserscan_pub = nh.advertise<LaserScan>("scan", 1);
+
+  // Validate frequency parameters
+  if (frequency > 25)
+  {
+    ROS_FATAL("Frequency exceeds the limit of 25hz.");
+    return -1;
+  }
+  else if (frequency <= 0)
+  {
+    ROS_FATAL("Frequency should be positive");
+    return -1;
+  }
+
+  if (fabs(frequency - expected_frequency) > EPS)
+  {
+    ROS_WARN("Frequency parameter is not equal to expected frequency parameter.");
+  }
+
+  // initialize loop rate
+  ros::Rate loop_rate(frequency);
 
   // diagnostics for frequency
   Updater updater;
@@ -105,18 +129,6 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  try
-  {
-    os32c.startUDPIO();
-    os32c.sendMeasurmentReportConfigUDP();
-  }
-  catch (std::logic_error ex)
-  {
-    ROS_FATAL_STREAM("Could not start UDP IO: " << ex.what());
-    return -1;
-  }
-
-  int ctr = 10;
   sensor_msgs::LaserScan laserscan_msg;
   os32c.fillLaserScanStaticConfig(&laserscan_msg);
   laserscan_msg.header.frame_id = frame_id;
@@ -125,9 +137,16 @@ int main(int argc, char *argv[])
   {
     try
     {
-      // Collect measurement from device, convert to ROS message format.
-      MeasurementReport report = os32c.receiveMeasurementReportUDP();
+      // Poll ranges and reflectivity
+      RangeAndReflectanceMeasurement report = os32c.getSingleRRScan();
       OS32C::convertToLaserScan(report, &laserscan_msg);
+
+      // In earlier versions reflectivity was not received. So to be backwards
+      // compatible clear reflectivity from msg.
+      if (!publish_reflectivity)
+      {
+        laserscan_msg.intensities.clear();
+      }
 
       // Stamp and publish message diagnosed
       laserscan_msg.header.stamp = ros::Time::now();
@@ -136,14 +155,6 @@ int main(int argc, char *argv[])
 
       // Update diagnostics
       updater.update();
-
-      // Every tenth message received, send the keepalive message in response.
-      // TODO: Make this time-based instead of message-count based.
-      if (++ctr > 10)
-      {
-        os32c.sendMeasurmentReportConfigUDP();
-        ctr = 0;
-      }
     }
     catch (std::runtime_error ex)
     {
@@ -155,6 +166,9 @@ int main(int argc, char *argv[])
     }
 
     ros::spinOnce();
+
+    // sleep
+    loop_rate.sleep();
   }
 
   os32c.closeConnection(0);
