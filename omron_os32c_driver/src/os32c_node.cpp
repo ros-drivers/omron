@@ -29,6 +29,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 #include <diagnostic_updater/publisher.h>
 #include <sensor_msgs/LaserScan.h>
 
+#include <rosconsole_bridge/bridge.h>
+REGISTER_ROSCONSOLE_BRIDGE;
+
 #include "odva_ethernetip/socket/tcp_socket.h"
 #include "odva_ethernetip/socket/udp_socket.h"
 #include "omron_os32c_driver/os32c.h"
