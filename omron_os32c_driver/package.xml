@@ -13,6 +13,7 @@
   <depend>boost</depend>
   <depend>diagnostic_updater</depend>
   <depend>odva_ethernetip</depend>
+  <depend>rosconsole_bridge</depend>
   <depend>roscpp</depend>
   <depend>sensor_msgs</depend>
 

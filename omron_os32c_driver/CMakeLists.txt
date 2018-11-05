@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(omron_os32c_driver)
 
-find_package(catkin REQUIRED COMPONENTS diagnostic_updater odva_ethernetip roscpp sensor_msgs)
+find_package(catkin REQUIRED COMPONENTS diagnostic_updater odva_ethernetip rosconsole_bridge roscpp sensor_msgs)
 
 find_package(Boost 1.47 REQUIRED COMPONENTS system)
 
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS diagnostic_updater odva_ethernetip roscpp sensor_msgs
+  CATKIN_DEPENDS diagnostic_updater odva_ethernetip rosconsole_bridge roscpp sensor_msgs
   LIBRARIES omron_os32c
   DEPENDS Boost
 )
