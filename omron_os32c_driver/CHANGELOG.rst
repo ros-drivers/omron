@@ -2,6 +2,15 @@
 Changelog for package omron_os32c_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge pull request `#23 <https://github.com/ros-drivers/omron/issues/23>`_ from ros-drivers/ci/kinetic_melodic
+  Industrial CI Kinetic + Melodic
+* fix: test narrow conversion from char to uint8_t
+* Merge pull request `#21 <https://github.com/ros-drivers/omron/issues/21>`_ from ros-drivers/rosconsole_bridge
+  Enabled rosconsole_bridge for odva_ethernetip
+* Contributors: Rein Appeldoorn
+
 0.1.2 (2018-05-18)
 ------------------
 * Changed maintainer to Rein Appeldoorn
