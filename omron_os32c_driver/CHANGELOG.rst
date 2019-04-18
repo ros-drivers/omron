@@ -2,8 +2,8 @@
 Changelog for package omron_os32c_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.3 (2019-04-18)
+------------------
 * Merge pull request `#23 <https://github.com/ros-drivers/omron/issues/23>`_ from ros-drivers/ci/kinetic_melodic
   Industrial CI Kinetic + Melodic
 * fix: test narrow conversion from char to uint8_t
