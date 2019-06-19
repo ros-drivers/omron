@@ -2,8 +2,8 @@
 Changelog for package omron_os32c_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2019-06-19)
+------------------
 * feat: ~reconnect_timeout parameter
   Driver will automatically reconnect if no connection can be established
   or if a scan has not be received for the specified number of seconds.
