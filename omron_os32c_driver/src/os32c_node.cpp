@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
   // get sensor config from params
   string host, frame_id, local_ip;
   double start_angle, end_angle, expected_frequency, frequency_tolerance, timestamp_min_acceptable,
-      timestamp_max_acceptable, frequency;
+      timestamp_max_acceptable, frequency, reconnect_timeout;
   bool publish_intensities;
   ros::param::param<std::string>("~host", host, "192.168.1.1");
   ros::param::param<std::string>("~local_ip", local_ip, "0.0.0.0");
@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
   ros::param::param<double>("~frequency_tolerance", frequency_tolerance, 0.1);
   ros::param::param<double>("~timestamp_min_acceptable", timestamp_min_acceptable, -1);
   ros::param::param<double>("~timestamp_max_acceptable", timestamp_max_acceptable, -1);
+  ros::param::param<double>("~reconnect_timeout", reconnect_timeout, 2.0);
   ros::param::param<bool>("~publish_intensities", publish_intensities, false);
 
   // publisher for laserscans
@@ -102,76 +103,93 @@ int main(int argc, char *argv[])
                                                     TimeStampStatusParam(timestamp_min_acceptable,
                                                                          timestamp_max_acceptable));
 
-  boost::asio::io_service io_service;
-  shared_ptr<TCPSocket> socket = shared_ptr<TCPSocket>(new TCPSocket(io_service));
-  shared_ptr<UDPSocket> io_socket = shared_ptr<UDPSocket>(new UDPSocket(io_service, 2222, local_ip));
-  OS32C os32c(socket, io_socket);
-
-  try
-  {
-    os32c.open(host);
-  }
-  catch (std::runtime_error ex)
-  {
-    ROS_FATAL_STREAM("Exception caught opening session: " << ex.what());
-    return -1;
-  }
-
-  try
-  {
-    os32c.setRangeFormat(RANGE_MEASURE_50M);
-    os32c.setReflectivityFormat(REFLECTIVITY_MEASURE_TOT_4PS);
-    os32c.selectBeams(start_angle, end_angle);
-  }
-  catch (std::invalid_argument ex)
-  {
-    ROS_FATAL_STREAM("Invalid arguments in sensor configuration: " << ex.what());
-    return -1;
-  }
-
-  sensor_msgs::LaserScan laserscan_msg;
-  os32c.fillLaserScanStaticConfig(&laserscan_msg);
-  laserscan_msg.header.frame_id = frame_id;
-
   while (ros::ok())
   {
+    boost::asio::io_service io_service;
+    shared_ptr<TCPSocket> socket = shared_ptr<TCPSocket>(new TCPSocket(io_service));
+    shared_ptr<UDPSocket> io_socket = shared_ptr<UDPSocket>(new UDPSocket(io_service, 2222, local_ip));
+    OS32C os32c(socket, io_socket);
+
     try
     {
-      // Poll ranges and reflectivity
-      RangeAndReflectanceMeasurement report = os32c.getSingleRRScan();
-      OS32C::convertToLaserScan(report, &laserscan_msg);
-
-      // In earlier versions reflectivity was not received. So to be backwards
-      // compatible clear reflectivity from msg.
-      if (!publish_intensities)
-      {
-        laserscan_msg.intensities.clear();
-      }
-
-      // Stamp and publish message diagnosed
-      laserscan_msg.header.stamp = ros::Time::now();
-      laserscan_msg.header.seq++;
-      diagnosed_publisher.publish(laserscan_msg);
-
-      // Update diagnostics
-      updater.update();
+      os32c.open(host);
     }
     catch (std::runtime_error ex)
     {
-      ROS_ERROR_STREAM_DELAYED_THROTTLE(5.0, "Exception caught requesting scan data: " << ex.what());
+      ROS_ERROR("Exception caught opening session: %s. Reconnecting in %.2f seconds ...", ex.what(), reconnect_timeout);
+      ros::Duration(reconnect_timeout).sleep();
+      continue;
     }
-    catch (std::logic_error ex)
+
+    try
     {
-      ROS_ERROR_STREAM("Problem parsing return data: " << ex.what());
+      os32c.setRangeFormat(RANGE_MEASURE_50M);
+      os32c.setReflectivityFormat(REFLECTIVITY_MEASURE_TOT_4PS);
+      os32c.selectBeams(start_angle, end_angle);
+    }
+    catch (std::invalid_argument ex)
+    {
+      ROS_ERROR("Invalid arguments in sensor configuration: %s. Reconnecting in %.2f seconds ...", ex.what(),
+                reconnect_timeout);
+      ros::Duration(reconnect_timeout).sleep();
+      continue;
     }
 
-    ros::spinOnce();
+    sensor_msgs::LaserScan laserscan_msg;
+    os32c.fillLaserScanStaticConfig(&laserscan_msg);
+    laserscan_msg.header.frame_id = frame_id;
 
-    // sleep
-    loop_rate.sleep();
+    while (ros::ok())
+    {
+      try
+      {
+        // Poll ranges and reflectivity
+        RangeAndReflectanceMeasurement report = os32c.getSingleRRScan();
+        OS32C::convertToLaserScan(report, &laserscan_msg);
+
+        // In earlier versions reflectivity was not received. So to be backwards
+        // compatible clear reflectivity from msg.
+        if (!publish_intensities)
+        {
+          laserscan_msg.intensities.clear();
+        }
+
+        // Stamp and publish message diagnosed
+        laserscan_msg.header.stamp = ros::Time::now();
+        laserscan_msg.header.seq++;
+        diagnosed_publisher.publish(laserscan_msg);
+
+        // Update diagnostics
+        updater.update();
+      }
+      catch (std::runtime_error ex)
+      {
+        ROS_ERROR_STREAM_DELAYED_THROTTLE(5.0, "Exception caught requesting scan data: " << ex.what());
+      }
+      catch (std::logic_error ex)
+      {
+        ROS_ERROR_STREAM("Problem parsing return data: " << ex.what());
+      }
+
+      if (!laserscan_msg.header.stamp.isZero() && (ros::Time::now() - laserscan_msg.header.stamp).toSec() > reconnect_timeout)
+      {
+        ROS_ERROR("No scan received for %.2f seconds, reconnecting ...", reconnect_timeout);
+        laserscan_msg.header.stamp = ros::Time();
+        break;
+      }
+
+      ros::spinOnce();
+
+      // sleep
+      loop_rate.sleep();
+    }
+
+    if (!ros::ok())
+    {
+      os32c.closeActiveConnection();
+      os32c.close();
+    }
   }
 
-  os32c.closeActiveConnection();
-  os32c.close();
   return 0;
 }
