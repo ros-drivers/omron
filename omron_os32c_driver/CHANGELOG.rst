@@ -2,6 +2,15 @@
 Changelog for package omron_os32c_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* feat: ~reconnect_timeout parameter
+  Driver will automatically reconnect if no connection can be established
+  or if a scan has not be received for the specified number of seconds.
+* Added reflection measurement and frequency param
+* Use TCP/IP polling instead of UDP
+* Contributors: Rein Appeldoorn, Tom de Winter
+
 0.1.3 (2019-04-18)
 ------------------
 * Merge pull request `#23 <https://github.com/ros-drivers/omron/issues/23>`_ from ros-drivers/ci/kinetic_melodic
