@@ -272,6 +272,15 @@ void OS32C::startUDPIO()
   t_to_o.rpi = 0x00013070;
 
   connection_num_ = createConnection(o_to_t, t_to_o);
+  ROS_INFO("Opened connection with id %d", connection_num_);
+}
+
+void OS32C::closeActiveConnection()
+{
+  if (connection_num_ >= 0) {
+    ROS_INFO("Closing connection with id %d", connection_num_);
+    closeConnection(connection_num_);
+  }
 }
 
 } // namespace os32c

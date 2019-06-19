@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
   string host, frame_id, local_ip;
   double start_angle, end_angle, expected_frequency, frequency_tolerance, timestamp_min_acceptable,
       timestamp_max_acceptable, frequency;
-  bool publish_reflectivity;
+  bool publish_intensities;
   ros::param::param<std::string>("~host", host, "192.168.1.1");
   ros::param::param<std::string>("~local_ip", local_ip, "0.0.0.0");
   ros::param::param<std::string>("~frame_id", frame_id, "laser");
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
   ros::param::param<double>("~frequency_tolerance", frequency_tolerance, 0.1);
   ros::param::param<double>("~timestamp_min_acceptable", timestamp_min_acceptable, -1);
   ros::param::param<double>("~timestamp_max_acceptable", timestamp_max_acceptable, -1);
-  ros::param::param<bool>("~publish_reflectivity", publish_reflectivity, false);
+  ros::param::param<bool>("~publish_intensities", publish_intensities, false);
 
   // publisher for laserscans
   ros::Publisher laserscan_pub = nh.advertise<LaserScan>("scan", 1);
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 
       // In earlier versions reflectivity was not received. So to be backwards
       // compatible clear reflectivity from msg.
-      if (!publish_reflectivity)
+      if (!publish_intensities)
       {
         laserscan_msg.intensities.clear();
       }
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
     }
     catch (std::runtime_error ex)
     {
-      ROS_ERROR_STREAM("Exception caught requesting scan data: " << ex.what());
+      ROS_ERROR_STREAM_DELAYED_THROTTLE(5.0, "Exception caught requesting scan data: " << ex.what());
     }
     catch (std::logic_error ex)
     {
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     loop_rate.sleep();
   }
 
-  os32c.closeConnection(0);
+  os32c.closeActiveConnection();
   os32c.close();
   return 0;
 }
