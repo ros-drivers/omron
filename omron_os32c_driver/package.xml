@@ -5,7 +5,7 @@
   <description>Interface driver for Omron OS32C Lidar via Ethernet/IP (Industrial Protocol)</description>
 
   <license>BSD</license>
-  <maintainer email="rein@ruvu.nl">Rein Appeldoorn</maintainer>
+  <maintainer email="rein@eurogroep.com">Rein Appeldoorn</maintainer>
   <author email="kareem@shehata.ca">Kareem Shehata</author>
 
   <buildtool_depend>catkin</buildtool_depend>
