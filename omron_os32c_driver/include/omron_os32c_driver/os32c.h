@@ -196,6 +196,8 @@ public:
 
   void startUDPIO();
 
+  void closeActiveConnection();
+
 private:
   // allow unit tests to access the helpers below for direct testing
   FRIEND_TEST(OS32CTest, test_calc_beam_mask_all);
