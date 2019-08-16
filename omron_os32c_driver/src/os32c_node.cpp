@@ -26,6 +26,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
 #include <ros/ros.h>
 #include <boost/shared_ptr.hpp>
+#include <boost/range/algorithm.hpp>
 #include <diagnostic_updater/publisher.h>
 #include <sensor_msgs/LaserScan.h>
 
@@ -40,6 +41,7 @@ REGISTER_ROSCONSOLE_BRIDGE;
 using std::cout;
 using std::endl;
 using boost::shared_ptr;
+using boost::range::reverse;
 using sensor_msgs::LaserScan;
 using eip::socket::TCPSocket;
 using eip::socket::UDPSocket;
@@ -58,6 +60,7 @@ int main(int argc, char *argv[])
   double start_angle, end_angle, expected_frequency, frequency_tolerance, timestamp_min_acceptable,
       timestamp_max_acceptable, frequency, reconnect_timeout;
   bool publish_intensities;
+  bool invert_scan;
   ros::param::param<std::string>("~host", host, "192.168.1.1");
   ros::param::param<std::string>("~local_ip", local_ip, "0.0.0.0");
   ros::param::param<std::string>("~frame_id", frame_id, "laser");
@@ -70,6 +73,7 @@ int main(int argc, char *argv[])
   ros::param::param<double>("~timestamp_max_acceptable", timestamp_max_acceptable, -1);
   ros::param::param<double>("~reconnect_timeout", reconnect_timeout, 2.0);
   ros::param::param<bool>("~publish_intensities", publish_intensities, false);
+  ros::param::param<bool>("~invert_scan", invert_scan, false);
 
   // publisher for laserscans
   ros::Publisher laserscan_pub = nh.advertise<LaserScan>("scan", 1);
@@ -145,6 +149,13 @@ int main(int argc, char *argv[])
       {
         // Poll ranges and reflectivity
         RangeAndReflectanceMeasurement report = os32c.getSingleRRScan();
+
+        // Invert range measurements if z-axis is needed to point upwards.
+        if (invert_scan)
+        {
+          reverse(report.range_data);
+        }
+
         OS32C::convertToLaserScan(report, &laserscan_msg);
 
         // In earlier versions reflectivity was not received. So to be backwards
