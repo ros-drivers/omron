@@ -2,6 +2,11 @@
 Changelog for package omron_os32c_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Feature: invert_scan param to invert the range measurements
+* Contributors: Amit Philip, Rein Appeldoorn
+
 1.0.0 (2019-06-19)
 ------------------
 * feat: ~reconnect_timeout parameter
