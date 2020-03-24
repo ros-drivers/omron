@@ -2,8 +2,8 @@
 Changelog for package omron_os32c_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2020-03-24)
+------------------
 * Feature: invert_scan param to invert the range measurements
 * Contributors: Amit Philip, Rein Appeldoorn
 

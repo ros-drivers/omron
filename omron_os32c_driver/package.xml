@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>omron_os32c_driver</name>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <description>Interface driver for Omron OS32C Lidar via Ethernet/IP (Industrial Protocol)</description>
 
   <license>BSD</license>
