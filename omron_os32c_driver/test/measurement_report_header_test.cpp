@@ -38,13 +38,13 @@ using namespace eip;
 using namespace eip::serialization;
 using namespace boost::asio;
 
-class MeasurementReportHeaderTest : public :: testing :: Test
+class MeasurementReportHeaderTest : public ::testing ::Test
 {
-
 };
 
 TEST_F(MeasurementReportHeaderTest, test_deserialize)
 {
+  // clang-format off
   EIP_BYTE d[] = {
     // scan count
     0xEF, 0xBE, 0xAD, 0xDE,
@@ -85,6 +85,7 @@ TEST_F(MeasurementReportHeaderTest, test_deserialize)
     // number of beams
     0xA5, 0x02,
   };
+  // clang-format on
 
   BufferReader reader(buffer(d));
   MeasurementReportHeader mrh;

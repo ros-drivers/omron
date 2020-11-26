@@ -140,7 +140,7 @@ public:
     reader.read(display_status);
     reader.read(non_safety_config_checksum);
     reader.read(safety_config_checksum);
-    reader.skip(6*sizeof(EIP_UINT));
+    reader.skip(6 * sizeof(EIP_UINT));
     reader.read(range_report_format);
     reader.read(refletivity_report_format);
     reader.skip(sizeof(EIP_UINT));
@@ -149,6 +149,6 @@ public:
   }
 };
 
-} // namespace omron_os32c_driver
+}  // namespace omron_os32c_driver
 
 #endif  // OMRON_OS32C_DRIVER_MEASUREMENT_REPORT_HEADER_H

@@ -38,13 +38,13 @@ using namespace eip;
 using namespace eip::serialization;
 using namespace boost::asio;
 
-class MeasurementReportConfigTest : public :: testing :: Test
+class MeasurementReportConfigTest : public ::testing ::Test
 {
-
 };
 
 TEST_F(MeasurementReportConfigTest, test_deserialize)
 {
+  // clang-format off
   EIP_BYTE d[] = {
     0x01, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00,
     0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -61,6 +61,7 @@ TEST_F(MeasurementReportConfigTest, test_deserialize)
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00
   };
+  // clang-format on
 
   BufferReader reader(buffer(d));
   MeasurementReportConfig mrc;

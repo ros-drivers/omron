@@ -53,7 +53,7 @@ using omron_os32c_driver::RangeAndReflectanceMeasurement;
 namespace omron_os32c_driver {
 
 const double OS32C::ANGLE_MIN = DEG2RAD(-135.2);
-const double OS32C::ANGLE_MAX = DEG2RAD( 135.2);
+const double OS32C::ANGLE_MAX = DEG2RAD(135.2);
 const double OS32C::ANGLE_INC = DEG2RAD(0.4);
 const double OS32C::DISTANCE_MIN = 0.002;
 const double OS32C::DISTANCE_MAX = 50;
@@ -138,8 +138,7 @@ void OS32C::calcBeamMask(double start_angle, double end_angle, EIP_BYTE mask[])
 void OS32C::selectBeams(double start_angle, double end_angle)
 {
   calcBeamMask(start_angle, end_angle, mrc_.beam_selection_mask);
-  shared_ptr<SerializableBuffer> sb = make_shared<SerializableBuffer>(
-    buffer(mrc_.beam_selection_mask));
+  shared_ptr<SerializableBuffer> sb = make_shared<SerializableBuffer>(buffer(mrc_.beam_selection_mask));
   setSingleAttributeSerializable(0x73, 1, 12, sb);
 }
 
@@ -161,8 +160,7 @@ void OS32C::fillLaserScanStaticConfig(sensor_msgs::LaserScan* ls)
 
 void OS32C::convertToLaserScan(const RangeAndReflectanceMeasurement& rr, sensor_msgs::LaserScan* ls)
 {
-  if (rr.range_data.size() != rr.header.num_beams ||
-    rr.reflectance_data.size() != rr.header.num_beams)
+  if (rr.range_data.size() != rr.header.num_beams || rr.reflectance_data.size() != rr.header.num_beams)
   {
     throw std::invalid_argument("Number of beams does not match vector size");
   }
@@ -235,8 +233,7 @@ void OS32C::sendMeasurmentReportConfigUDP()
   // TODO: check that connection is valid
   CPFPacket pkt;
   shared_ptr<SequencedAddressItem> address =
-    make_shared<SequencedAddressItem>(
-      getConnection(connection_num_).o_to_t_connection_id, mrc_sequence_num_++);
+      make_shared<SequencedAddressItem>(getConnection(connection_num_).o_to_t_connection_id, mrc_sequence_num_++);
   shared_ptr<MeasurementReportConfig> data = make_shared<MeasurementReportConfig>();
   *data = mrc_;
   pkt.getItems().push_back(CPFItem(0x8002, address));
@@ -277,10 +274,11 @@ void OS32C::startUDPIO()
 
 void OS32C::closeActiveConnection()
 {
-  if (connection_num_ >= 0) {
+  if (connection_num_ >= 0)
+  {
     ROS_INFO("Closing connection with id %d", connection_num_);
     closeConnection(connection_num_);
   }
 }
 
-} // namespace os32c
+}  // namespace omron_os32c_driver

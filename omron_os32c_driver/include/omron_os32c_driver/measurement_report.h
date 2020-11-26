@@ -98,6 +98,6 @@ public:
   }
 };
 
-} // namespace omron_os32c_driver
+}  // namespace omron_os32c_driver
 
 #endif  // OMRON_OS32C_DRIVER_MEASUREMENT_REPORT_H

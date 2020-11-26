@@ -42,40 +42,41 @@ using namespace eip::serialization;
 
 namespace omron_os32c_driver {
 
-class OS32CTest : public :: testing :: Test
+class OS32CTest : public ::testing ::Test
 {
 public:
-  OS32CTest() : os32c(ts, ts_io) { }
+  OS32CTest() : os32c(ts, ts_io)
+  {
+  }
 
 protected:
   virtual void SetUp()
   {
-    ts = make_shared<TestSocket> ();
-    ts_io = make_shared<TestSocket> ();
+    ts = make_shared<TestSocket>();
+    ts_io = make_shared<TestSocket>();
     os32c = OS32C(ts, ts_io);
   }
 
   shared_ptr<TestSocket> ts;
   shared_ptr<TestSocket> ts_io;
   OS32C os32c;
-
 };
 
 TEST_F(OS32CTest, test_calc_beam_number)
 {
-  EXPECT_EQ(  0, OS32C::calcBeamNumber(2.359685166149626 )); // 135.200001 degrees
-  EXPECT_EQ(  0, OS32C::calcBeamNumber(2.356194491937674 )); // 135.0000001
+  EXPECT_EQ(0, OS32C::calcBeamNumber(2.359685166149626));  // 135.200001 degrees
+  EXPECT_EQ(0, OS32C::calcBeamNumber(2.356194491937674));  // 135.0000001
   // EXPECT_EQ(  0, OS32C::calcBeamNumber(2.356194490192345 )); // 135
-  EXPECT_EQ(  1, OS32C::calcBeamNumber(2.3561944901748917)); // 134.999999999
-  EXPECT_EQ(  1, OS32C::calcBeamNumber(2.3492131733589003)); // 134.60000001
-  EXPECT_EQ(338, OS32C::calcBeamNumber(0.0034906583294557337)); // 0.19999999
+  EXPECT_EQ(1, OS32C::calcBeamNumber(2.3561944901748917));       // 134.999999999
+  EXPECT_EQ(1, OS32C::calcBeamNumber(2.3492131733589003));       // 134.60000001
+  EXPECT_EQ(338, OS32C::calcBeamNumber(0.0034906583294557337));  // 0.19999999
   EXPECT_EQ(338, OS32C::calcBeamNumber(0));
-  EXPECT_EQ(338, OS32C::calcBeamNumber(-0.0034906583294557337)); // -0.19999999
-  EXPECT_EQ(675, OS32C::calcBeamNumber(-2.3492131733589003)); // -134.60000001
-  EXPECT_EQ(675, OS32C::calcBeamNumber(-2.3561944901748917)); // -134.999999999
+  EXPECT_EQ(338, OS32C::calcBeamNumber(-0.0034906583294557337));  // -0.19999999
+  EXPECT_EQ(675, OS32C::calcBeamNumber(-2.3492131733589003));     // -134.60000001
+  EXPECT_EQ(675, OS32C::calcBeamNumber(-2.3561944901748917));     // -134.999999999
   // EXPECT_EQ(676, OS32C::calcBeamNumber(-2.356194490192345 )); // -135
-  EXPECT_EQ(676, OS32C::calcBeamNumber(-2.356194491937674 )); // -135.0000001
-  EXPECT_EQ(676, OS32C::calcBeamNumber(-2.359685166149626 )); // -135.200001 degrees
+  EXPECT_EQ(676, OS32C::calcBeamNumber(-2.356194491937674));  // -135.0000001
+  EXPECT_EQ(676, OS32C::calcBeamNumber(-2.359685166149626));  // -135.200001 degrees
 }
 
 TEST_F(OS32CTest, test_calc_beam_centre)
@@ -89,7 +90,7 @@ TEST_F(OS32CTest, test_calc_beam_centre)
 
 TEST_F(OS32CTest, test_calc_beam_mask_all)
 {
-  EIP_BYTE buffer[96]; // plus 32 bits on each end as guards
+  EIP_BYTE buffer[96];  // plus 32 bits on each end as guards
   memset(buffer, 0xAA, sizeof(buffer));
   EIP_BYTE* mask = buffer + 4;
   os32c.calcBeamMask(OS32C::ANGLE_MAX, OS32C::ANGLE_MIN, mask);
@@ -115,7 +116,7 @@ TEST_F(OS32CTest, test_calc_beam_mask_all)
 
 TEST_F(OS32CTest, test_calc_beam_at_90)
 {
-  EIP_BYTE buffer[96]; // plus 32 bits on each end as guards
+  EIP_BYTE buffer[96];  // plus 32 bits on each end as guards
   memset(buffer, 0xAA, sizeof(buffer));
   EIP_BYTE* mask = buffer + 4;
   os32c.calcBeamMask(0.7853981633974483, -0.7853981633974483, mask);
@@ -147,7 +148,7 @@ TEST_F(OS32CTest, test_calc_beam_at_90)
 
 TEST_F(OS32CTest, test_calc_beam_boundaries)
 {
-  EIP_BYTE buffer[96]; // plus 32 bits on each end as guards
+  EIP_BYTE buffer[96];  // plus 32 bits on each end as guards
   memset(buffer, 0xAA, sizeof(buffer));
   EIP_BYTE* mask = buffer + 4;
   os32c.calcBeamMask(0.6911503837897546, -0.7051130178057091, mask);
@@ -178,27 +179,25 @@ TEST_F(OS32CTest, test_calc_beam_boundaries)
 
 TEST_F(OS32CTest, test_calc_beam_invalid_args)
 {
-  EIP_BYTE buffer[96]; // plus 32 bits on each end as guards
+  EIP_BYTE buffer[96];  // plus 32 bits on each end as guards
   memset(buffer, 0xAA, sizeof(buffer));
   EIP_BYTE* mask = buffer + 4;
-  EXPECT_THROW(os32c.calcBeamMask(2.3631758089456514, -0.7051130178057091, mask),
-    std::invalid_argument);
-  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, -2.3631758089456514, mask),
-    std::invalid_argument);
-  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, 0.6911503837897546, mask),
-    std::invalid_argument);
-  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, 0.6841690685271065, mask),
-    std::invalid_argument);
+  EXPECT_THROW(os32c.calcBeamMask(2.3631758089456514, -0.7051130178057091, mask), std::invalid_argument);
+  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, -2.3631758089456514, mask), std::invalid_argument);
+  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, 0.6911503837897546, mask), std::invalid_argument);
+  EXPECT_THROW(os32c.calcBeamMask(0.6911503837897546, 0.6841690685271065, mask), std::invalid_argument);
 }
 
 TEST_F(OS32CTest, test_select_beams)
 {
+  // clang-format off
   char reg_resp_packet[] = {
     0x65, 0x00, 0x04, 0x00, 0x05, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x01, 0x00, 0x00, 0x00,
   };
+  // clang-format on
 
   ts->rx_buffer = buffer(reg_resp_packet);
   os32c.open("example_host");
@@ -212,6 +211,7 @@ TEST_F(OS32CTest, test_select_beams)
   memset(ts->tx_buffer, 0, sizeof(ts->tx_count));
 
   // response packet from OS32C docs
+  // clang-format off
   uint8_t resp_packet[] = {
     0x6F, 0x00, 0x14, 0x00, 0x05, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -220,6 +220,7 @@ TEST_F(OS32CTest, test_select_beams)
     0x00, 0x00, 0x00, 0x00, 0xB2, 0x00, 0x04, 0x00,
     0x90, 0x00, 0x00, 0x00,
   };
+  // clang-format on
   ts->rx_buffer = buffer(resp_packet);
 
   os32c.selectBeams(OS32C::ANGLE_MAX, OS32C::ANGLE_MIN);
@@ -410,10 +411,10 @@ TEST_F(OS32CTest, test_convert_to_laserscan)
   sensor_msgs::LaserScan ls;
   OS32C::convertToLaserScan(rr, &ls);
   EXPECT_FLOAT_EQ(42898E-9, ls.time_increment);
-  EXPECT_FLOAT_EQ( 1.0  , ls.ranges[0]);
-  EXPECT_FLOAT_EQ( 1.253, ls.ranges[1]);
-  EXPECT_FLOAT_EQ( 1.0  , ls.ranges[2]);
-  EXPECT_FLOAT_EQ( 0.0  , ls.ranges[3]);
+  EXPECT_FLOAT_EQ(1.0, ls.ranges[0]);
+  EXPECT_FLOAT_EQ(1.253, ls.ranges[1]);
+  EXPECT_FLOAT_EQ(1.0, ls.ranges[2]);
+  EXPECT_FLOAT_EQ(0.0, ls.ranges[3]);
   EXPECT_FLOAT_EQ(48.750, ls.ranges[4]);
   EXPECT_FLOAT_EQ(49.999, ls.ranges[5]);
   EXPECT_FLOAT_EQ(50.001, ls.ranges[6]);
@@ -435,6 +436,7 @@ TEST_F(OS32CTest, test_convert_to_laserscan)
 
 TEST_F(OS32CTest, test_receive_measurement_report)
 {
+  // clang-format off
   uint8_t io_packet[] = {
     0x02, 0x00, 0x02, 0x80, 0x08, 0x00, 0x04, 0x00,
     0x02, 0x00, 0x15, 0x00, 0x00, 0x00, 0xB1, 0x00,
@@ -452,6 +454,7 @@ TEST_F(OS32CTest, test_receive_measurement_report)
     0x67, 0x08, 0x5D, 0x08, 0x67, 0x08, 0x5E, 0x08,
     0x5E, 0x08, 0x6F, 0x08,
   };
+  // clang-format on
 
   ts_io->rx_buffer = buffer(io_packet);
   MeasurementReport data = os32c.receiveMeasurementReportUDP();
@@ -497,4 +500,4 @@ TEST_F(OS32CTest, test_receive_measurement_report)
 }
 
 
-} // namespace os32c
+}  // namespace omron_os32c_driver

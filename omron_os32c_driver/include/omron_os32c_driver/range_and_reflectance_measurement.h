@@ -59,8 +59,7 @@ public:
    */
   virtual size_t getLength() const
   {
-    return header.getLength() + range_data.size() * sizeof(EIP_UINT)
-      + reflectance_data.size() * sizeof(EIP_UINT);
+    return header.getLength() + range_data.size() * sizeof(EIP_UINT) + reflectance_data.size() * sizeof(EIP_UINT);
   }
 
   /**
@@ -103,6 +102,6 @@ public:
   }
 };
 
-} // namespace omron_os32c_driver
+}  // namespace omron_os32c_driver
 
 #endif  // OS32C_RANGE_AND_REFLECTANCE_MEASUREMENT_H

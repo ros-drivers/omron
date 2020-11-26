@@ -38,9 +38,8 @@ using namespace eip;
 using namespace eip::serialization;
 using namespace boost::asio;
 
-class MeasurementReportTest : public :: testing :: Test
+class MeasurementReportTest : public ::testing ::Test
 {
-
 };
 
 TEST_F(MeasurementReportTest, test_deserialize)
@@ -70,7 +69,8 @@ TEST_F(MeasurementReportTest, test_deserialize)
   BufferWriter writer(buffer(d));
   mrh.serialize(writer);
 
-  for (EIP_UINT i = 10000; i < 10000 + 1000; ++i) {
+  for (EIP_UINT i = 10000; i < 10000 + 1000; ++i)
+  {
     writer.write(i);
   }
 
@@ -128,7 +128,8 @@ TEST_F(MeasurementReportTest, test_serialize)
   mr.header.num_beams = 1000;
 
   mr.measurement_data.resize(1000);
-  for (int i = 0; i <  1000; ++i) {
+  for (int i = 0; i < 1000; ++i)
+  {
     mr.measurement_data[i] = i + 30000;
   }
 
@@ -198,7 +199,7 @@ TEST_F(MeasurementReportTest, test_serialize)
   for (int i = 0; i < 1000; ++i)
   {
     EIP_UINT exp_value = i + 30000;
-    EXPECT_EQ((exp_value) & 0x00FF, d[56 + i*2]);
-    EXPECT_EQ((exp_value >> 8) & 0x00FF, d[56 + i*2 + 1]);
+    EXPECT_EQ((exp_value)&0x00FF, d[56 + i * 2]);
+    EXPECT_EQ((exp_value >> 8) & 0x00FF, d[56 + i * 2 + 1]);
   }
 }

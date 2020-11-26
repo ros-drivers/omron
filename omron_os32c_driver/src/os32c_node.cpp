@@ -50,7 +50,7 @@ using namespace diagnostic_updater;
 const double EPS = 1e-3;
 
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   ros::init(argc, argv, "os32c");
   ros::NodeHandle nh;
@@ -101,11 +101,9 @@ int main(int argc, char *argv[])
   // diagnostics for frequency
   Updater updater;
   updater.setHardwareID(host);
-  DiagnosedPublisher<LaserScan> diagnosed_publisher(laserscan_pub, updater, FrequencyStatusParam(&expected_frequency,
-                                                                                                 &expected_frequency,
-                                                                                                 frequency_tolerance),
-                                                    TimeStampStatusParam(timestamp_min_acceptable,
-                                                                         timestamp_max_acceptable));
+  DiagnosedPublisher<LaserScan> diagnosed_publisher(
+      laserscan_pub, updater, FrequencyStatusParam(&expected_frequency, &expected_frequency, frequency_tolerance),
+      TimeStampStatusParam(timestamp_min_acceptable, timestamp_max_acceptable));
 
   while (ros::ok())
   {
@@ -182,7 +180,8 @@ int main(int argc, char *argv[])
         ROS_ERROR_STREAM("Problem parsing return data: " << ex.what());
       }
 
-      if (!laserscan_msg.header.stamp.isZero() && (ros::Time::now() - laserscan_msg.header.stamp).toSec() > reconnect_timeout)
+      if (!laserscan_msg.header.stamp.isZero() &&
+          (ros::Time::now() - laserscan_msg.header.stamp).toSec() > reconnect_timeout)
       {
         ROS_ERROR("No scan received for %.2f seconds, reconnecting ...", reconnect_timeout);
         laserscan_msg.header.stamp = ros::Time();

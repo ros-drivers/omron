@@ -52,19 +52,19 @@ namespace omron_os32c_driver {
 
 typedef enum
 {
-  NO_TOF_MEASUREMENTS       = 0,
-  RANGE_MEASURE_50M         = 1,
-  RANGE_MEASURE_32M_PZ      = 2,
-  RANGE_MEASURE_16M_WZ1PZ   = 3,
+  NO_TOF_MEASUREMENTS = 0,
+  RANGE_MEASURE_50M = 1,
+  RANGE_MEASURE_32M_PZ = 2,
+  RANGE_MEASURE_16M_WZ1PZ = 3,
   RANGE_MEASURE_8M_WZ2WZ1PZ = 4,
-  RANGE_MEASURE_TOF_4PS     = 5,
+  RANGE_MEASURE_TOF_4PS = 5,
 } OS32C_RANGE_FORMAT;
 
 typedef enum
 {
-  NO_TOT_MEASUREMENTS               = 0,
-  REFLECTIVITY_MEASURE_TOT_ENCODED  = 1,
-  REFLECTIVITY_MEASURE_TOT_4PS      = 2,
+  NO_TOT_MEASUREMENTS = 0,
+  REFLECTIVITY_MEASURE_TOT_ENCODED = 1,
+  REFLECTIVITY_MEASURE_TOT_4PS = 2,
 } OS32C_REFLECTIVITY_FORMAT;
 
 /**
@@ -80,8 +80,11 @@ public:
    * @param socket Socket instance to use for communication with the lidar
    */
   OS32C(shared_ptr<Socket> socket, shared_ptr<Socket> io_socket)
-    : Session(socket, io_socket), start_angle_(ANGLE_MAX), end_angle_(ANGLE_MIN),
-      connection_num_(-1), mrc_sequence_num_(1)
+    : Session(socket, io_socket)
+    , start_angle_(ANGLE_MAX)
+    , end_angle_(ANGLE_MIN)
+    , connection_num_(-1)
+    , mrc_sequence_num_(1)
   {
   }
 
@@ -223,6 +226,6 @@ private:
   void calcBeamMask(double start_angle, double end_angle, EIP_BYTE mask[]);
 };
 
-} // namespace omron_os32c_driver
+}  // namespace omron_os32c_driver
 
 #endif  // OMRON_OS32C_DRIVER_OS32C_H
